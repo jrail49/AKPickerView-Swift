@@ -293,17 +293,22 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
                 }() : CATransform3DIdentity;
         }
     }
+    
+    /// Readwrite. A fload value which determines the end alpha of the mask. This does nothing if after setting pickerViewStyle
+    @IBInspectable public var maskAlpha: CGFloat = 0.0
     /// Readwrite. A boolean value indicates whether the mask is disabled.
     @IBInspectable public var maskDisabled: Bool! = nil {
         didSet {
             self.collectionView.layer.mask = self.maskDisabled == true ? nil : {
                 let maskLayer = CAGradientLayer()
+                let maskColor = UIColor.greenColor().colorWithAlphaComponent(maskAlpha)
                 maskLayer.frame = self.collectionView.bounds
                 maskLayer.colors = [
-                    UIColor.clearColor().CGColor,
+                    maskColor.CGColor,
                     UIColor.blackColor().CGColor,
                     UIColor.blackColor().CGColor,
-                    UIColor.clearColor().CGColor]
+                    maskColor.CGColor
+                ]
                 maskLayer.locations = [0.0, 0.33, 0.66, 1.0]
                 maskLayer.startPoint = CGPointMake(0.0, 0.0)
                 maskLayer.endPoint = CGPointMake(1.0, 0.0)
@@ -513,7 +518,7 @@ public class AKPickerView: UIView, UICollectionViewDataSource, UICollectionViewD
             self.delegate?.pickerView?(self, didSelectItem: item)
         }
     }
-    
+
     // MARK: Delegate Handling
     /**
     Private.
